@@ -413,6 +413,8 @@ Crie uma página para gerenciar a carteira de gastos em diversas moedas, e que t
     
 - Um campo para selecionar em qual moeda será registrada a despesa.
 
+  - Adicione o atributo `data-testid="currency-input"`.
+
   - O campo deve ter a label `Moeda`.
 
   - As options devem ser preenchidas pelo valor da chave `currencies` do estado global, implementada no requisito anterior.
@@ -427,6 +429,8 @@ Crie uma página para gerenciar a carteira de gastos em diversas moedas, e que t
 
 - Um campo para selecionar uma categoria (tag) para a despesa.
 
+  - Adicione o atributo `data-testid="tag-input"`.
+  
   - Este campo deve ser um dropdown. a pessoa usuária deve poder escolher entre os campos: 'Alimentação', 'Lazer', 'Trabalho', 'Transporte' e 'Saúde'.
 
   - O campo deve ser um `<select>`.
