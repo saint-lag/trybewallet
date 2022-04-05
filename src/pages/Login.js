@@ -1,11 +1,12 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import propTypes from 'prop-types';
+import addEmail from '../actions';
 
 class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      redirectToWallet: false,
       btnDisabled: true,
       inputs: {
         email: '',
@@ -15,31 +16,31 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.inputChecker = this.inputChecker.bind(this);
-    this.stateChanger = this.stateChanger.bind(this);
   }
 
-  async handleChange(event) {
-    await this.stateChanger(event);
-    this.inputChecker();
+  handleChange(event) {
+    const { inputs } = this.state;
+    const { name, value } = event.target;
+    this.setState(
+      {
+        inputs: { ...inputs, [name]: value },
+      },
+      () => this.inputChecker(),
+    );
   }
 
   handleClick() {
-    this.setState(() => ({ redirectToWallet: true }));
-  }
-
-  async stateChanger(event) {
+    const { add, history } = this.props;
     const { inputs } = this.state;
-    const { name, value } = event.target;
-    this.setState(() => ({
-      inputs: { ...inputs, [name]: value },
-    }));
+    const { email } = inputs;
+
+    add(email);
+    history.push('/carteira');
   }
 
   inputChecker() {
     const { inputs } = this.state;
     const { email, password } = inputs;
-
-    console.log(inputs);
 
     const re = /\S+@\S+\.\S+/;
     const MINIMUN_PASSWORD_LENGTH = 6;
@@ -47,8 +48,6 @@ class Login extends React.Component {
     const emailValidation = re.test(email);
     const passwordValidation = password.length >= MINIMUN_PASSWORD_LENGTH;
     const approved = emailValidation && passwordValidation;
-
-    console.log(approved);
 
     if (approved) {
       this.setState({
@@ -62,10 +61,9 @@ class Login extends React.Component {
   }
 
   render() {
-    const { btnDisabled, redirectToWallet } = this.state;
+    const { btnDisabled } = this.state;
     return (
       <main>
-        {redirectToWallet && <Redirect to="/carteira" />}
         <form>
           <input
             onChange={ (event) => this.handleChange(event) }
@@ -90,4 +88,14 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  add: propTypes.func.isRequired,
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }).isRequired,
+};
+const mapDispatchToProps = (dispatch) => ({
+  add: (email) => dispatch(addEmail(email)),
+});
+
+export default connect(null, mapDispatchToProps)(Login);

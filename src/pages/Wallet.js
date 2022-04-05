@@ -3,7 +3,7 @@ import React from 'react';
 class Wallet extends React.Component {
   render() {
     return (
-      <h>TODO</h>
+      <h1>TODO</h1>
     );
   }
 }
