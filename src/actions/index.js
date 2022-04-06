@@ -1,4 +1,5 @@
 // Coloque aqui suas actions
-const addEmail = (email) => ({ type: 'ADD_EMAIL', email });
-
-export default addEmail;
+export const updateEmail = (email) => ({
+  type: 'UPDATE_EMAIL', email });
+export const updateCurrencies = (currencies) => ({
+  type: 'UPDATE_CURRENCIES', currencies });
