@@ -1,7 +1,7 @@
 const ENDPOINT = 'https://economia.awesomeapi.com.br/json/all';
 const DELETE_CURRENCIES = ['USDT'];
 
-const fetchCurrencies = async () => {
+export const fetchCurrencies = async () => {
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json()
@@ -20,4 +20,17 @@ const fetchCurrencies = async () => {
   }
 };
 
-export default fetchCurrencies;
+export const fetchEverything = async () => {
+  try {
+    const response = await fetch(ENDPOINT);
+    const data = await response.json();
+
+    if (DELETE_CURRENCIES.length > 0) {
+      DELETE_CURRENCIES.forEach((currency) => delete data[currency]);
+    }
+
+    return data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
