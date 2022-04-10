@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import fetchCurrencies from '../services/api';
-import { updateCurrencies, updateExpenses } from '../actions';
+import { updateCurrencies, updateExpenses, fetchExchangeRates } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
@@ -29,6 +29,7 @@ class Wallet extends React.Component {
 
   handleChange({ target }) {
     const { value, id } = target;
+    const { formInput } = this.state;
     this.setState({
       formInput: { ...formInput, [id]: value },
     });
@@ -40,9 +41,13 @@ class Wallet extends React.Component {
     const { addExpenses, expenses } = this.props;
     const { formInput } = this.state;
 
+    fetchExchangeRates();
+    const { exchangeRates } = this.props;
     const EXPENSES_LENGTH = expenses.length;
-    const currentExpense = formInput;
-    currentExpense[id] = EXPENSES_LENGTH + 1;
+    const currentExpense = JSON.parse(JSON.stringify(formInput));
+
+    currentExpense.id = EXPENSES_LENGTH;
+    currentExpense.exchangeRates = exchangeRates;
 
     addExpenses(currentExpense);
   }
@@ -110,7 +115,7 @@ class Wallet extends React.Component {
               <option value="health">Saúde</option>
             </select>
           </label>
-          <button type="button" onClick={ () => this.handleSubmit() }>
+          <button type="button" onClick={ (event) => this.handleSubmit(event) }>
             Adicionar despesa
           </button>
         </form>
@@ -127,6 +132,7 @@ Wallet.propTypes = {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   expenses: state.wallet.expenses,
+  exchangeRates: state.wallet.exchangeRates,
 });
 const mapDispatchToProps = (dispatch) => ({
   addCurrencies: (currencies) => dispatch(updateCurrencies(currencies)),
