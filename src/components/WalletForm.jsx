@@ -4,15 +4,21 @@ import PropTypes from 'prop-types';
 import { fetchCurrencies, fetchEverything } from '../services/api';
 import { updateCurrencies, updateExpenses, calculateExpenses } from '../actions';
 
+const METHOD_INPUT = 'method-input';
+const CURRENCY_INPUT = 'currency-input';
+const TAG_INPUT = 'tag-input';
+const VALUE_INPUT = 'value-input';
+const DESCRIPTION_INPUT = 'description-input';
+
 class WalletForm extends React.Component {
   constructor() {
     super();
     const resettedValues = {
-      'currency-input': 'USD',
-      'method-input': 'Dinheiro',
-      'tag-input': 'Alimentação',
-      'value-input': '',
-      'description-input': '',
+      [CURRENCY_INPUT]: 'USD',
+      [METHOD_INPUT]: 'Dinheiro',
+      [TAG_INPUT]: 'Alimentação',
+      [VALUE_INPUT]: '',
+      [DESCRIPTION_INPUT]: '',
     };
     this.state = {
       currencies: [],
@@ -44,11 +50,11 @@ class WalletForm extends React.Component {
     const EXPENSES_LENGTH = expenses.length;
     const deepCopyFormInput = JSON.parse(JSON.stringify(formInput));
     const currentExpense = {
-      value: deepCopyFormInput['value-input'],
-      description: deepCopyFormInput['description-input'],
-      method: deepCopyFormInput['method-input'],
-      tag: deepCopyFormInput['tag-input'],
-      currency: deepCopyFormInput['currency-input'],
+      value: deepCopyFormInput[VALUE_INPUT],
+      description: deepCopyFormInput[DESCRIPTION_INPUT],
+      method: deepCopyFormInput[METHOD_INPUT],
+      tag: deepCopyFormInput[TAG_INPUT],
+      currency: deepCopyFormInput[CURRENCY_INPUT],
     };
 
     currentExpense.id = EXPENSES_LENGTH;
@@ -70,9 +76,9 @@ class WalletForm extends React.Component {
         document.getElementById(input).value = '';
       }
     });
-    document.getElementById('currency-input').value = resettedValues['currency-input'];
-    document.getElementById('method-input').value = resettedValues['method-input'];
-    document.getElementById('tag-input').value = resettedValues['tag-input'];
+    document.getElementById(CURRENCY_INPUT).value = resettedValues[CURRENCY_INPUT];
+    document.getElementById(METHOD_INPUT).value = resettedValues[METHOD_INPUT];
+    document.getElementById(TAG_INPUT).value = resettedValues[TAG_INPUT];
 
     this.setState({
       btnDisabled: true,
@@ -97,7 +103,7 @@ class WalletForm extends React.Component {
     this.setState({
       formInput: { ...formInput, [id]: value },
     });
-    if (document.getElementById('value-input').value.length > 0) {
+    if (document.getElementById(VALUE_INPUT).value.length > 0) {
       this.setState({
         btnDisabled: false,
       });
